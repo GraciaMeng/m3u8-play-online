@@ -1,11 +1,15 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import Header from './layout/Header.vue';
 import M3u8Video from './components/M3u8Video.vue';
 </script>
 
 <template>
-  <M3u8Video />
+  <Header />
+  <div class="m3u8-container">
+    <M3u8Video />
+  </div>
 </template>
 
 <style scoped>
@@ -19,5 +23,9 @@ import M3u8Video from './components/M3u8Video.vue';
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+.m3u8-container {
+  height: calc(100vh - var(--m3u8-nav-height));
+  padding-top: var(--m3u8-nav-height);
 }
 </style>
