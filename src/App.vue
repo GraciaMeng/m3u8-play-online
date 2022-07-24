@@ -3,6 +3,16 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Header from './layout/Header.vue';
 import M3u8Video from './components/M3u8Video.vue';
+import { useVideoStoretoRefs } from './store/useVideoStore'
+import { onMounted } from 'vue';
+
+const { videoStore } = useVideoStoretoRefs()
+onMounted(() => {
+  videoStore.setHistoryList()
+})
+window.onbeforeunload = function (e) {
+  videoStore.saveHistoryList()
+}
 </script>
 
 <template>
@@ -27,5 +37,6 @@ import M3u8Video from './components/M3u8Video.vue';
 .m3u8-container {
   height: calc(100vh - var(--m3u8-nav-height));
   padding-top: var(--m3u8-nav-height);
+  z-index: 11;
 }
 </style>

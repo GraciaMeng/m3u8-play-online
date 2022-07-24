@@ -4,6 +4,7 @@ import "./style.css";
 import App from "./App.vue";
 import "video.js/dist/video-js.css";
 import "./assets/css/var.css";
+import "./assets/css/iconfont/iconfont.css"
 
 function createMain() {
   const app = createApp(App);

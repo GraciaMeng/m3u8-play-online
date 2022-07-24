@@ -2,11 +2,16 @@
   <header class="header-container">
     <div class="nav-bar">
       <div class="header__title-box">
-        <img class="header__logo" src="../assets/images/vue.svg" alt="Vue logo" />
+        <img
+          class="header__logo"
+          src="../assets/images/vue.svg"
+          alt="Vue logo"
+        />
         <div class="header__title">m3u8在线播放</div>
         <SearchInput />
       </div>
       <div class="header__extra">
+        <span class="header__history" @click="openHistoryDrawer">历史记录</span>
         <a
           href="https://github.com/GraciaMeng"
           target="_blank"
@@ -16,21 +21,30 @@
       </div>
     </div>
   </header>
+  <HistoryList v-model:visible="visible" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import SearchInput from "@/components/SearchInput.vue";
+import HistoryList from "@/components/HistoryList.vue";
 
 export default defineComponent({
   name: "Header",
   components: {
-    SearchInput
-  }
+    SearchInput,
+    HistoryList,
+  },
 });
 </script>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const visible = ref(false);
+
+function openHistoryDrawer() {
+  visible.value = true;
+}
+</script>
 
 <style lang="scss" scoped>
 .header-container {
@@ -52,9 +66,16 @@ export default defineComponent({
   height: var(--m3u8-nav-height);
   max-width: calc(1440px - 64px);
   .header__logo,
-  .header__extra img {
-    height: 24px;
+  .header__extra  {
+    .header__history {
+      margin-right: 12px;
+      cursor: pointer;
+    }
+    img {
+      height: 24px;
+    }
   }
+  
   .header__title {
     margin-left: 8px;
     font-weight: 600;
