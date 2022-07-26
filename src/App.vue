@@ -10,9 +10,9 @@ const { videoStore } = useVideoStoretoRefs()
 onMounted(() => {
   videoStore.setHistoryList()
 })
-window.onbeforeunload = function (e) {
+window.addEventListener('unload', function () {
   videoStore.saveHistoryList()
-}
+})
 </script>
 
 <template>

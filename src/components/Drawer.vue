@@ -12,10 +12,10 @@
       >
         <div class="drawer__mask-header">
           <div class="drawer__mask-haader-title">
-            <icon
+            <span
               class="iconfont icon-guanbi action-close"
               @click="closeDrawer"
-            ></icon>
+            ></span>
             <div class="drawer__title">历史记录</div>
           </div>
         </div>
@@ -96,6 +96,13 @@ function closeDrawer() {
       padding: 16px 24px;
       border-bottom: 1px solid #f0f0f0;
       border-radius: 2px 2px 0 0;
+    }
+
+    .drawer__mask-body {
+      padding: 24px;
+      overflow: auto;
+      word-wrap: break-word;
+      line-height: 1.5715;
     }
   }
 }

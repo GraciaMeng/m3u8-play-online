@@ -6,7 +6,10 @@
         v-for="(item, index) in videoHistoryList"
         :key="index"
       >
-        {{ item.url }}
+        <span>{{ index + 1 }}.{{ item.url }}</span>
+        <Button class="play-button" @click="playHistoryVideo(item.url)">
+          <img class="play-img" src="@/assets/images/play.svg" alt="play" />
+        </Button>
       </div>
     </div>
   </Drawer>
@@ -16,11 +19,13 @@
 import { computed, defineComponent, ref } from "vue";
 import Drawer from "./Drawer.vue";
 import { useVideoStoretoRefs } from "@/store/useVideoStore";
+import Button from "./Button.vue";
 
 export default defineComponent({
   name: "HistoryList",
   components: {
     Drawer,
+    Button
   },
 });
 </script>
@@ -41,7 +46,25 @@ const composeVisible = computed({
   },
 });
 
-const { videoHistoryList } = useVideoStoretoRefs();
+const { videoHistoryList, videoStore } = useVideoStoretoRefs();
+function playHistoryVideo(url: string) {
+  videoStore.setVideoUrl(url)
+  composeVisible.value = false
+  videoStore.playVideo()
+  videoStore.addHistory({ url: videoStore.videoUrl })
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.history-item {
+  display: flex;
+  align-items: center;
+  word-break: break-all;
+}
+.play-button {
+  .play-img {
+    height: 20px;
+    width: 20px;
+  }
+}
+</style>

@@ -1,60 +1,71 @@
-import { defineStore, storeToRefs } from 'pinia'
-import videojs from "video.js";
+import { defineStore, storeToRefs } from "pinia";
+import videojs, { VideoJsPlayer } from "video.js";
 
-export const VIDEO_HISTORY = 'video_history'
+export const VIDEO_HISTORY = "video_history";
 
 export interface HistoryInterface {
-  url: string
+  url: string;
 }
 export interface VideoState {
-  videoUrl: string
-  videoHistoryList: HistoryInterface[]
+  videoUrl: string;
+  videoHistoryList: HistoryInterface[];
+  video: VideoJsPlayer | undefined;
+  isPlay: boolean;
 }
 
-export const useVideoStore = defineStore('video', {
+export const useVideoStore = defineStore("video", {
   state: (): VideoState => {
     return {
-      videoUrl: '',
-      videoHistoryList: []
-    }
+      videoUrl: "",
+      videoHistoryList: [],
+      video: undefined,
+      isPlay: false,
+    };
   },
   actions: {
     setVideoUrl(val: string) {
-      this.videoUrl = val
+      this.videoUrl = val;
     },
     playVideo() {
-      const video = videojs("video", {
+      this.video?.dispose();
+      const el = document.querySelector(".video-container");
+      el!.innerHTML = `
+        <video id="video" preload="auto" muted class="video-js vjs-default-skin" style="width: 100%;height: 100%;object-fit: fill;">
+          <source src="${this.videoUrl}" type="application/x-mpegURL" />
+        </video>
+      `;
+      this.video = videojs("video", {
         bigPlayButton: true,
         muted: true,
         controls: true,
       });
-      video.play();
+      this.video!.play();
     },
     saveHistoryList() {
-      const json = JSON.stringify(this.videoHistoryList)
-      localStorage.setItem(VIDEO_HISTORY, json)
+      const json = JSON.stringify(this.videoHistoryList);
+      localStorage.setItem(VIDEO_HISTORY, json);
     },
     setHistoryList() {
-      const list = JSON.parse(localStorage.getItem(VIDEO_HISTORY) || "[]")
-      this.videoHistoryList = list
+      const list = JSON.parse(localStorage.getItem(VIDEO_HISTORY) || "[]");
+      this.videoHistoryList = list;
     },
     checkHasHistory(url: string) {
-      const index = this.videoHistoryList.findIndex(item => item.url === url)
+      const index = this.videoHistoryList.findIndex((item) => item.url === url);
       if (index >= 0) {
-        this.videoHistoryList.splice(index, 1)
+        this.videoHistoryList.splice(index, 1);
       }
     },
     addHistory(item: HistoryInterface) {
-      this.checkHasHistory(item.url)
-      this.videoHistoryList.push(item)
-    }
-  }
-})
+      this.checkHasHistory(item.url);
+      this.videoHistoryList.unshift(item);
+    },
+  },
+});
 
 export function useVideoStoretoRefs() {
-  const videoStore = useVideoStore()
+  const videoStore = useVideoStore();
   return {
     videoStore,
-    ...storeToRefs(videoStore)
-  }
+    ...storeToRefs(videoStore),
+  };
 }
